@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.DriveArcade;
 import frc.robot.commands.DriveTank;
 import frc.robot.subsystems.Drivetrain;
@@ -21,6 +22,8 @@ public class RobotContainer {
 
   private Joystick leftOperatorJoystick_;
   private Joystick rightOperatorJoystick_;
+
+  private Button shifterButton_;
 
   private static final int kLeftDriverJoystickID = 0;
   private static final int kRightDriverJoystickID = 1;
@@ -46,11 +49,14 @@ public class RobotContainer {
     leftOperatorJoystick_ = new Joystick(kLeftOperatorJoystickID);
     rightOperatorJoystick_ = new Joystick(kRightOperatorJoystickID);
 
+    shifterButton_ = new Button(this::getShifterButton);
+
     configureButtonBindings();
     configureDefaultCommands();
   }
 
   private void configureButtonBindings() {
+    shifterButton_.whenPressed(() -> drivetrain_.toggleShifter());
   }
 
   private void configureDefaultCommands() {
@@ -82,6 +88,10 @@ public class RobotContainer {
 
   private double getRightDriverY() {
     return rightDriverJoystick_.getY(Hand.kRight);
+  }
+
+  private boolean getShifterButton() {
+    return leftDriverJoystick_.getRawButton(11);
   }
 
   public Command getAutonomousCommand() {
