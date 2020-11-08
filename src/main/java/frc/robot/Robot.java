@@ -18,9 +18,19 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+
+  public static final double LOOP_TIME = 0.01;
+
   private Command autonomousCommand;
 
   private RobotContainer robotContainer;
+
+  /**
+   * Constructs a robot with a faster loop time.
+   */
+  public Robot() {
+    super(LOOP_TIME);
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
