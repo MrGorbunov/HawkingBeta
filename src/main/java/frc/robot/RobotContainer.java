@@ -64,6 +64,8 @@ public class RobotContainer {
     // Configure the default command to drive based off of what drive system
     // the user currently has selected.
     // Note that we only want to use one drive type in competition for performance.
+
+    // The selector right now give a null pointer excetpion. TODO: Look into.
     /*
     drive.setDefaultCommand(new SelectCommand(
         Map.ofEntries(
@@ -77,9 +79,9 @@ public class RobotContainer {
           driveTypeChooser::getSelected
     ));
     */
-    drive.setDefaultCommand(new DriveTankCommand(controls::getLeftDriverY,
-                                                 controls::getRightDriverY,
-                                                 drive));
+    drive.setDefaultCommand(new DriveArcadeCommand(controls::getLeftDriverY,
+                                                   controls::getRightDriverX,
+                                                   drive));
   }
 
   /**

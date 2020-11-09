@@ -25,6 +25,8 @@ import frc.robot.util.SimGyro;
 
 public class DriveSubsystem extends SubsystemBase {
 
+  // CONSTANTS //
+
   private static final int LEFT_MASTER_ID = 1;
   private static final int LEFT_SLAVE_ID = 2;
   private static final int RIGHT_MASTER_ID = 3;
@@ -53,6 +55,8 @@ public class DriveSubsystem extends SubsystemBase {
   private static final double EFFECTIVE_TRACK_WIDTH = 0.654; // meters
   private static final DifferentialDriveKinematics KINEMATICS
       = new DifferentialDriveKinematics(EFFECTIVE_TRACK_WIDTH);
+
+  // END CONSTANTS //
 
   private WPI_TalonSRX leftMaster = new WPI_TalonSRX(LEFT_MASTER_ID);
   private WPI_TalonSRX leftSlave = new WPI_TalonSRX(LEFT_SLAVE_ID);

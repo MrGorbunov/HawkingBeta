@@ -32,8 +32,10 @@ public class DriveArcadeCommand extends CommandBase {
 
   @Override
   public void execute() {
-    drive.driveOpenLoop(throttle.get() + steer.get(),
-                             throttle.get() - steer.get());
+    double throttleVal = Math.abs(throttle.get()) > 0.1 ? throttle.get() : 0;
+    double steerVal = Math.abs(steer.get()) > 0.1 ? steer.get() : 0; 
+    drive.driveOpenLoop(throttleVal + steerVal,
+                             throttleVal - steerVal);
   }
 
   @Override

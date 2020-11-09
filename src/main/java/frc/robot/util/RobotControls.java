@@ -55,12 +55,12 @@ public class RobotControls {
   }
 
   public double getRightDriverX() {
-    return useXbox ? xboxController.getX(Hand.kRight) :
+    return useXbox ? xboxController.getRawAxis(2) :
         rightDriverJoystick.getX(Hand.kRight);
   }
 
   public double getRightDriverY() {
-    return useXbox ? -xboxController.getRawAxis(4) :
+    return useXbox ? -xboxController.getRawAxis(3) :
         rightDriverJoystick.getY(Hand.kRight);
   }
 
