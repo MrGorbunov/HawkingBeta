@@ -77,7 +77,7 @@ public class RobotContainer {
 
   /**
    * Get the command to run for auto.
-
+   *
    * @return The command to be run for auto.
    */
   public Command getAutonomousCommand() {

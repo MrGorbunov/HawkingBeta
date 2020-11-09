@@ -63,7 +63,7 @@ public class NavX {
 
   /**
    * Constructs new navx using SPI ports protocol.
-
+   *
    * @param spiPortId id of navx
    */
   public NavX(SPI.Port spiPortId) {
@@ -74,7 +74,7 @@ public class NavX {
 
   /**
    * Constructs new navx using Seral port protocol.
-
+   *
    * @param serialPortId the id of the navx
    */
   public NavX(SerialPort.Port serialPortId) {
@@ -111,7 +111,7 @@ public class NavX {
   /**
    * Set the angle to transform all reading by. 
    * Generally used for when the navx is mounted at an angle.
-
+   *
    * @param adjustment The Rotation2d to use for the adjustment
    */
   public synchronized void setAngleAdjustment(Rotation2d adjustment) {
@@ -120,7 +120,7 @@ public class NavX {
 
   /**
    * Get the raw sensor value for the yaw of the navx.
-
+   *
    * @return The raw yaw reading of the navx in degrees.
    */
   protected synchronized double getRawYawDegrees() {
@@ -129,7 +129,7 @@ public class NavX {
 
   /**
    * Get the raw sensor value for the yaw of the navx.
-
+   *
    * @return The unadjusted yaw of navx as a Rotation2d.
    */
   public synchronized Rotation2d getRawRotation() {
@@ -139,7 +139,7 @@ public class NavX {
   /**
    * Get the current rotation around the yaw axis relieve.
    * to the angle adjustment
-
+   *
    * @return The true yaw of the navx as a rotation 2d.
    */
   public synchronized Rotation2d getYaw() {
@@ -148,7 +148,7 @@ public class NavX {
 
   /**
    * Get the rate at which the navx is moving on the yaw axis.
-
+   *
    * @return How fast the yaw is changing in degrees per sec.
    */
   public double getYawRateDegreesPerSec() {
@@ -157,7 +157,7 @@ public class NavX {
 
   /**
    * Get the rate at which the navx is moving on the yaw axis.
-
+   *
    * @return How fast the yaw is changing in radians per sec.
    */
   public double getYawRateRadiansPerSec() {
@@ -166,7 +166,7 @@ public class NavX {
 
   /**
    * Get measured acceleration of the navx on the x axis.
-
+   *
    * @return The navx acceleration reading on the x axis.
    */
   public double getRawAccelX() {
@@ -175,7 +175,7 @@ public class NavX {
 
   /**
    * Get the roll of the navx in degrees.
-
+   *
    * @return The navx roll in degrees.
    */
   public double getRollDegrees() {
@@ -184,7 +184,7 @@ public class NavX {
 
   /**
    * Get the pitch of the sensor.
-
+   *
    * @return The navx pitch in degrees.
    */
   public double getPitchDegrees() {
@@ -193,7 +193,7 @@ public class NavX {
 
   /**
    * Gets the timestamp that we last heard from the navx sensor.
-
+   *
    * @return  The last time we got a message from the sensor.
    */
   public long getLastSensorTimestamp() {
@@ -202,7 +202,7 @@ public class NavX {
 
   /**
    * Checks to see if the navx is currently connected.
-
+   *
    * @return True if the navx is connected otherwise false.
    */
   public boolean isConnected() {

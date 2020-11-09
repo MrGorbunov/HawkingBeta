@@ -15,7 +15,7 @@ public class DriveArcadeCommand extends CommandBase {
 
   /**
    * Constructor for DriveArcade Command.
-
+   *
    * @param throttle The supplier for the command to read the throttle value.
    * @param steer The supplier for the command to read the steering value.
    * @param drive The instance of drive to use.

@@ -15,7 +15,7 @@ public class DriveTankCommand extends CommandBase {
 
   /**
    * Constructor for DriveTankCommand.
-
+   *
    * @param left The supplier to get left drive power from
    * @param right THe supplier to get right drive power from
    * @param drive The drive subsystem instance to use.
