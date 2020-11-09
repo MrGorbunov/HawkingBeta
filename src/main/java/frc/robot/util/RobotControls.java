@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * A loose wrapper for the joysticks to control the robot.
@@ -18,33 +19,53 @@ public class RobotControls {
   private static final int kDriveShiftButton = 11; 
 
   
-  private Joystick leftDriverJoystick 
-      = new Joystick(LEFT_DRIVER_JOYSTICK_ID);
-  private  Joystick rightDriverJoystick
-      = new Joystick(RIGHT_OPERATOR_JOYSTICK_ID);
+  private Joystick leftDriverJoystick;
+  private  Joystick rightDriverJoystick;
+  private Joystick leftOperatorJoystick;
+  private Joystick rightOperatorJoystick;
+  private XboxController xboxController;
 
-  private Joystick leftOperatorJoystick
-      = new Joystick(LEFT_OPERATOR_JOYSTICK_ID);
-  private Joystick rightOperatorJoystick
-      = new Joystick(RIGHT_DRIVER_JOYSTICK_ID);
+  private boolean useXbox;
 
+  /**
+   * Controllers RobotControls.
+   *
+   * @param useXbox Weather to use an xBox controller or joysticks.
+   */
+  public RobotControls(boolean useXbox) {
+    this.useXbox = useXbox;
+    if (this.useXbox) {
+      xboxController = new XboxController(LEFT_DRIVER_JOYSTICK_ID);
+    } else {
+      leftDriverJoystick = new Joystick(LEFT_DRIVER_JOYSTICK_ID);
+      rightDriverJoystick = new Joystick(RIGHT_OPERATOR_JOYSTICK_ID);
+      leftOperatorJoystick = new Joystick(LEFT_OPERATOR_JOYSTICK_ID);
+      rightOperatorJoystick = new Joystick(RIGHT_DRIVER_JOYSTICK_ID);
+    }
+  }
+  
   public double getLeftDriverX() {
-    return leftDriverJoystick.getX(Hand.kLeft);
+    return useXbox ? xboxController.getX(Hand.kLeft) :
+        leftDriverJoystick.getX(Hand.kLeft);
   }
 
   public double getLeftDriverY() {
-    return leftDriverJoystick.getY(Hand.kLeft);
+    return useXbox ? -xboxController.getY(Hand.kLeft) :
+        leftDriverJoystick.getY(Hand.kLeft);
   }
 
   public double getRightDriverX() {
-    return rightDriverJoystick.getX(Hand.kRight);
+    return useXbox ? xboxController.getX(Hand.kRight) :
+        rightDriverJoystick.getX(Hand.kRight);
   }
 
   public double getRightDriverY() {
-    return rightDriverJoystick.getY(Hand.kRight);
+    return useXbox ? -xboxController.getRawAxis(4) :
+        rightDriverJoystick.getY(Hand.kRight);
   }
 
   public boolean getShifterButton() {
-    return leftDriverJoystick.getRawButton(kDriveShiftButton);
+    return useXbox ? xboxController.getBumper(Hand.kRight) :
+        leftDriverJoystick.getRawButton(kDriveShiftButton);
   }
 }

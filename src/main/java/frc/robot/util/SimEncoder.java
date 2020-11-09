@@ -13,7 +13,7 @@ public class SimEncoder {
    *
    * @param name Name of the encoder must be a unique name.
    */
-  public SimEncoder(int name) {
+  public SimEncoder(String name) {
     SimDevice device = SimDevice.create("Encoder[" + name + "]");
     distance = device.createDouble("Distance", true, 0);
     speed = device.createDouble("Speed", true, 0);

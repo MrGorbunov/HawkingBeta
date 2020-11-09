@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.DriveArcadeCommand;
 import frc.robot.commands.DriveTankCommand;
@@ -26,7 +27,7 @@ public class RobotContainer {
   ////////////////
   private DriveSubsystem drive = new DriveSubsystem();
   
-  private RobotControls controls = new RobotControls();
+  private RobotControls controls = new RobotControls(true);
   private Button shifterButton = new Button(controls::getShifterButton);
 
   private enum DriveType {
@@ -48,8 +49,9 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    shifterButton.whenPressed(new RunCommand(
-        () -> drive.setShifter(!drive.getShifter()))
+    shifterButton.whileActiveOnce(new StartEndCommand(
+        () -> drive.setShifter(!drive.getShifter()),
+        () -> {})
     );
   }
 
@@ -62,6 +64,7 @@ public class RobotContainer {
     // Configure the default command to drive based off of what drive system
     // the user currently has selected.
     // Note that we only want to use one drive type in competition for performance.
+    /*
     drive.setDefaultCommand(new SelectCommand(
         Map.ofEntries(
           Map.entry(DriveType.TANK, new DriveTankCommand(controls::getLeftDriverY,
@@ -73,6 +76,10 @@ public class RobotContainer {
           ),
           driveTypeChooser::getSelected
     ));
+    */
+    drive.setDefaultCommand(new DriveTankCommand(controls::getLeftDriverY,
+                                                 controls::getRightDriverY,
+                                                 drive));
   }
 
   /**
