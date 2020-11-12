@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2021.1.1-beta-1"
+    id 'checkstyle'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -70,4 +71,11 @@ dependencies {
 jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+}
+
+checkstyle {
+    toolVersion = '8.37'
+    configFile = file("$projectDir/google_checks.xml")
+    showViolations = true
+    ignoreFailures = false
 }

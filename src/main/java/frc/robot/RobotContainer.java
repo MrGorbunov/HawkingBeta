@@ -1,57 +1,126 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.commands.DriveArcadeCommand;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.util.RobotControls;
 
 /**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
+ * Wraps all the subsystems and commands for the robot.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // Note: The robot container is a functional description of the robot.
+  // It should not describe how to something but what the robot does
+  // when a particular inputs is received.
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  ////////////////
+  // Subsystems //
+  ////////////////
+  private DriveSubsystem drive = new DriveSubsystem();
+  private LiftSubsystem lift = new LiftSubsystem();
+  
+  private RobotControls controls = new RobotControls(true);
+  private Button shifterButton = new Button(controls::getShifterButton);
+  private Button liftDownButton = new Button(controls::getLiftDownButton);
+  private Button liftSwitchButton  = new Button(controls::getLiftSwitchButton);
+  
+  private Button liftLowScaleButton
+      = new Button(controls::getLiftLowScaleButton);
+  private Button liftHighScaleButton
+      = new Button(controls::getLiftHighScaleButton);
 
+  private enum DriveType {
+    TANK, ARCADE 
+  }
 
+  private SendableChooser<DriveType> driveTypeChooser
+      = new SendableChooser<>();
 
   /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
+   * Default constructor for RobotContainer.
    */
   public RobotContainer() {
-    // Configure the button bindings
+    driveTypeChooser.setDefaultOption("Tank", DriveType.TANK);
+    SmartDashboard.putData(driveTypeChooser);
+
     configureButtonBindings();
+    configureDefaultCommands();
   }
 
-  /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
   private void configureButtonBindings() {
+    shifterButton.whileActiveOnce(new StartEndCommand(
+        () -> drive.setShifter(!drive.getShifter()),
+        () -> {})
+    );
+    liftDownButton.whenPressed(new InstantCommand(
+        () -> lift.setGoal(0.0),
+        lift
+    ));
+    liftSwitchButton.whenPressed(new InstantCommand(
+        () -> lift.setGoal(0.25),
+        lift
+    ));
+    liftLowScaleButton.whenPressed(new InstantCommand(
+        () -> lift.setGoal(1.0),
+        lift
+    ));
+    liftHighScaleButton.whenPressed(new InstantCommand(
+        () -> lift.setGoal(1.5),
+        lift
+    )); 
   }
 
+  /**
+   * Configure the default commands for each subsystem. The default commands
+   * should be the commands run for during tellop.
+   */
+  private void configureDefaultCommands() {
+
+    // Configure the default command to drive based off of what drive system
+    // the user currently has selected.
+    // Note that we only want to use one drive type in competition for performance.
+
+    // The selector right now give a null pointer excetpion. TODO: Look into.
+    /*
+    drive.setDefaultCommand(new SelectCommand(
+        Map.ofEntries(
+          Map.entry(DriveType.TANK, new DriveTankCommand(controls::getLeftDriverY,
+                                                         controls::getRightDriverY,
+                                                         drive)),
+          Map.entry(DriveType.ARCADE, new DriveArcadeCommand(controls::getLeftDriverY,
+                                                             controls::getRightDriverX,
+                                                             drive))
+          ),
+          driveTypeChooser::getSelected
+    ));
+    */
+    drive.setDefaultCommand(new DriveArcadeCommand(controls::getLeftDriverY,
+                                                   controls::getRightDriverX,
+                                                   drive));
+  }
 
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
+   * Get the command to run for auto.
    *
-   * @return the command to run in autonomous
+   * @return The command to be run for auto.
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return new PrintCommand("Auto would run now.");
+  }
+
+  /**
+   * Reset all the state space contorlers.
+   */
+  public void resetControllers() {
+    CommandScheduler.getInstance().schedule(new RunCommand(() -> lift.reset(), lift));
   }
 }
