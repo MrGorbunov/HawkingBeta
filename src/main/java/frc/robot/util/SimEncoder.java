@@ -36,7 +36,7 @@ public class SimEncoder {
    *     calling setDistance.
    */
   public double getDistance() {
-    return speed.get();
+    return distance.get();
   }
 
   /**

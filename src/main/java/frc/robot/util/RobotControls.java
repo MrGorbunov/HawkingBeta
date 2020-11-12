@@ -68,4 +68,20 @@ public class RobotControls {
     return useXbox ? xboxController.getBumper(Hand.kRight) :
         leftDriverJoystick.getRawButton(kDriveShiftButton);
   }
+
+  public boolean getLiftDownButton() {
+    return useXbox ? xboxController.getAButton() : false;
+  }
+
+  public boolean getLiftSwitchButton() {
+    return useXbox ? xboxController.getXButton() : false;
+  }
+
+  public boolean getLiftLowScaleButton() {
+    return useXbox ? xboxController.getBButton() : false;
+  }
+
+  public boolean getLiftHighScaleButton() {
+    return useXbox ? xboxController.getYButton() : false;
+  }
 }
