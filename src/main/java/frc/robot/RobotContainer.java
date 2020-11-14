@@ -28,7 +28,7 @@ public class RobotContainer {
   private DriveSubsystem drive = new DriveSubsystem();
   private LiftSubsystem lift = new LiftSubsystem();
   
-  private RobotControls controls = new RobotControls(true);
+  private RobotControls controls = new RobotControls(false);
   private Button shifterButton = new Button(controls::getShifterButton);
   private Button liftDownButton = new Button(controls::getLiftDownButton);
   private Button liftSwitchButton  = new Button(controls::getLiftSwitchButton);

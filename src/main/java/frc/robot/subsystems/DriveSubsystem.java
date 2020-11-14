@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.numbers.N2;
 import frc.robot.Robot;
 import frc.robot.util.NavX;
+import frc.robot.util.RobotControls;
 import frc.robot.util.SimEncoder;
 import frc.robot.util.SimGyro;
 
@@ -92,6 +93,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
+
+    leftMaster.setInverted(true);
+    leftSlave.setInverted(true);
+
     setShifter(true);
 
     if (RobotBase.isSimulation()) {

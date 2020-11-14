@@ -80,7 +80,7 @@ public class LiftSubsystem extends SubsystemBase {
 
   private ElevatorSim sim = new ElevatorSim(plant,
       MOTORS, GEARBOX_GEARING, PULLY_RADIUS, MIN_HEIGHT, MAX_HEIGHT);
-  private SimEncoder encoderSim = new SimEncoder("Lift Encoder");
+  private SimEncoder encoderSim;
 
   /**
    * Constuct a Lift Subsystem.
@@ -90,8 +90,11 @@ public class LiftSubsystem extends SubsystemBase {
     masterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1,
         (int) (Robot.LOOP_TIME * 1000));
     followerMotor.follow(masterMotor);
-    encoderSim.setDistance(0.0);
-    encoderSim.setSpeed(0.0);
+    if (RobotBase.isSimulation()) {
+      encoderSim = new SimEncoder("Lift Encoder");
+      encoderSim.setDistance(0.0);
+      encoderSim.setSpeed(0.0);
+    }
     reset();
   }
 
@@ -138,8 +141,9 @@ public class LiftSubsystem extends SubsystemBase {
    * @param position The goal posotion in meters
    */
   public void setGoal(double position) {
-    if (position <= MAX_HEIGHT && position >= MIN_HEIGHT)
+    if (position <= MAX_HEIGHT && position >= MIN_HEIGHT) {
       goal = new TrapezoidProfile.State(position, 0.0);
+    }
   }
 
   private static double ticksToMeters(double ticks) {

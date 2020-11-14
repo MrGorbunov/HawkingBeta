@@ -38,36 +38,26 @@ public class RobotControls {
       xboxController = new XboxController(LEFT_DRIVER_JOYSTICK_ID);
     } else {
       leftDriverJoystick = new Joystick(LEFT_DRIVER_JOYSTICK_ID);
-      rightDriverJoystick = new Joystick(RIGHT_OPERATOR_JOYSTICK_ID);
+      rightDriverJoystick = new Joystick(RIGHT_DRIVER_JOYSTICK_ID);
       leftOperatorJoystick = new Joystick(LEFT_OPERATOR_JOYSTICK_ID);
-      rightOperatorJoystick = new Joystick(RIGHT_DRIVER_JOYSTICK_ID);
+      rightOperatorJoystick = new Joystick(RIGHT_OPERATOR_JOYSTICK_ID);
     }
   }
   
-  public double getLeftDriverX() {
-    return useXbox ? xboxController.getX(Hand.kLeft) :
-        leftDriverJoystick.getX(Hand.kLeft);
-  }
+  public double getLeftDriverX() { return useXbox ? xboxController.getX(Hand.kRight) :
+        leftDriverJoystick.getX(Hand.kLeft); }
 
-  public double getLeftDriverY() {
-    return useXbox ? -xboxController.getY(Hand.kLeft) :
-        leftDriverJoystick.getY(Hand.kLeft);
-  }
+  public double getLeftDriverY() { return useXbox ? -xboxController.getY(Hand.kLeft) :
+        -leftDriverJoystick.getY(Hand.kLeft); }
 
-  public double getRightDriverX() {
-    return useXbox ? xboxController.getRawAxis(2) :
-        rightDriverJoystick.getX(Hand.kRight);
-  }
+  public double getRightDriverX() { return useXbox ? xboxController.getRawAxis(2) :
+        rightDriverJoystick.getX(Hand.kRight); }
 
-  public double getRightDriverY() {
-    return useXbox ? -xboxController.getRawAxis(3) :
-        rightDriverJoystick.getY(Hand.kRight);
-  }
+  public double getRightDriverY() { return useXbox ? -xboxController.getRawAxis(3) :
+        rightDriverJoystick.getY(Hand.kRight); }
 
-  public boolean getShifterButton() {
-    return useXbox ? xboxController.getBumper(Hand.kRight) :
-        leftDriverJoystick.getRawButton(kDriveShiftButton);
-  }
+  public boolean getShifterButton() { return useXbox ? xboxController.getBumper(Hand.kRight) :
+        leftDriverJoystick.getRawButton(kDriveShiftButton); }
 
   public boolean getLiftDownButton() {
     return useXbox ? xboxController.getAButton() : false;
