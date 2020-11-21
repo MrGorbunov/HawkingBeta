@@ -23,6 +23,7 @@ import frc.robot.util.NavX;
 import frc.robot.util.RobotControls;
 import frc.robot.util.SimEncoder;
 import frc.robot.util.SimGyro;
+import frc.robot.util.Units;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -141,10 +142,12 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     if (RobotBase.isSimulation()) {
       odometry.update(gyroSim.getHeading(),
-          leftEncoderSim.getDistance(), rightEncoderSim.getDistance());
+          Units.encoderTicksToMeters(leftEncoderSim.getDistance()),
+          Units.encoderTicksToMeters(rightEncoderSim.getDistance()));
     } else {
-      odometry.update(gyro.getYaw(), leftMaster.getSelectedSensorPosition(),
-          rightMaster.getSelectedSensorPosition());
+      odometry.update(gyro.getYaw(),
+                      Units.encoderTicksToMeters(leftMaster.getSelectedSensorPosition()),
+                      Units.encoderTicksToMeters(rightMaster.getSelectedSensorPosition()));
     }
   }
 

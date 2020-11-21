@@ -11,14 +11,18 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class RobotControls {
 
-  private static final int LEFT_OPERATOR_JOYSTICK_ID = 3;
-  private static final int RIGHT_OPERATOR_JOYSTICK_ID = 4;
-  private static final int LEFT_DRIVER_JOYSTICK_ID = 0;
-  private static final int RIGHT_DRIVER_JOYSTICK_ID = 1;
+  private static final int kLeftDriverJoystickID = 0;
+  private static final int kRightDriverJoystickID = 1;
+  private static final int kLeftOperatorJoystickID = 3;
+  private static final int kRightOperatorJoystickID = 4;
 
-  private static final int kDriveShiftButton = 11; 
 
-  
+  private static final int kDriveShiftButton = 3;
+  private static final int kLiftDownButton = 14;
+  private static final int kLiftSwitchButton = 15;
+  private static final int kLiftLowScaleButton = 16;
+  private static final int kLiftHighScaleButton = 11;
+
   private Joystick leftDriverJoystick;
   private  Joystick rightDriverJoystick;
   private Joystick leftOperatorJoystick;
@@ -35,43 +39,53 @@ public class RobotControls {
   public RobotControls(boolean useXbox) {
     this.useXbox = useXbox;
     if (this.useXbox) {
-      xboxController = new XboxController(LEFT_DRIVER_JOYSTICK_ID);
+      xboxController = new XboxController(kLeftDriverJoystickID);
     } else {
-      leftDriverJoystick = new Joystick(LEFT_DRIVER_JOYSTICK_ID);
-      rightDriverJoystick = new Joystick(RIGHT_DRIVER_JOYSTICK_ID);
-      leftOperatorJoystick = new Joystick(LEFT_OPERATOR_JOYSTICK_ID);
-      rightOperatorJoystick = new Joystick(RIGHT_OPERATOR_JOYSTICK_ID);
+      leftDriverJoystick = new Joystick(kLeftDriverJoystickID);
+      rightDriverJoystick = new Joystick(kRightDriverJoystickID);
+      leftOperatorJoystick = new Joystick(kLeftOperatorJoystickID);
+      rightOperatorJoystick = new Joystick(kRightOperatorJoystickID);
     }
   }
   
-  public double getLeftDriverX() { return useXbox ? xboxController.getX(Hand.kRight) :
-        leftDriverJoystick.getX(Hand.kLeft); }
+  public double getLeftDriverX() {
+    return useXbox ? xboxController.getX(Hand.kRight) : leftDriverJoystick.getX(Hand.kLeft);
+  }
 
-  public double getLeftDriverY() { return useXbox ? -xboxController.getY(Hand.kLeft) :
-        -leftDriverJoystick.getY(Hand.kLeft); }
+  public double getLeftDriverY() {
+    return useXbox ? -xboxController.getY(Hand.kLeft) : -leftDriverJoystick.getY(Hand.kLeft);
+  }
 
-  public double getRightDriverX() { return useXbox ? xboxController.getRawAxis(2) :
-        rightDriverJoystick.getX(Hand.kRight); }
+  public double getRightDriverX() {
+    return useXbox ? xboxController.getRawAxis(2) : rightDriverJoystick.getX(Hand.kRight);
+  }
 
-  public double getRightDriverY() { return useXbox ? -xboxController.getRawAxis(3) :
-        rightDriverJoystick.getY(Hand.kRight); }
+  public double getRightDriverY() {
+    return useXbox ? -xboxController.getRawAxis(3) : rightDriverJoystick.getY(Hand.kRight);
+  }
 
-  public boolean getShifterButton() { return useXbox ? xboxController.getBumper(Hand.kRight) :
-        leftDriverJoystick.getRawButton(kDriveShiftButton); }
+  public boolean getShifterButton() {
+    return useXbox ? xboxController.getBumper(Hand.kRight) :
+                     leftDriverJoystick.getRawButton(kDriveShiftButton);
+  }
 
   public boolean getLiftDownButton() {
-    return useXbox ? xboxController.getAButton() : false;
+    return useXbox ? xboxController.getAButton() : leftDriverJoystick.getRawButton(kLiftDownButton);
   }
 
   public boolean getLiftSwitchButton() {
-    return useXbox ? xboxController.getXButton() : false;
+    return useXbox ? xboxController.getXButton() :
+                     leftDriverJoystick.getRawButton(kLiftSwitchButton);
   }
 
   public boolean getLiftLowScaleButton() {
-    return useXbox ? xboxController.getBButton() : false;
+    return useXbox ? xboxController.getBButton() :
+                     leftDriverJoystick.getRawButton(kLiftLowScaleButton);
   }
 
   public boolean getLiftHighScaleButton() {
-    return useXbox ? xboxController.getYButton() : false;
+    return useXbox ? xboxController.getYButton() :
+                     leftDriverJoystick.getRawButton(kLiftHighScaleButton);
   }
+
 }

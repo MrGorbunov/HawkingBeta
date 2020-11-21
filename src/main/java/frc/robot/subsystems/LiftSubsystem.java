@@ -23,63 +23,63 @@ import frc.robot.util.SimEncoder;
 
 public class LiftSubsystem extends SubsystemBase {
 
-  private static final int MASTER_MOTOR_ID = 5;
-  private static final int FOLLOWER_MOTOR_ID = 6;
-  private static final int NUM_MOTORS = 2;
-  private static final DCMotor MOTORS = DCMotor.getMiniCIM(NUM_MOTORS);
+  private static final int kMasterMotorID = 8;
+  private static final int kFollowerMotorID = 9;
+  private static final int kNumMotors = 2;
+  private static final DCMotor kMotors = DCMotor.getMiniCIM(kNumMotors);
 
-  private static final double CARRAGE_MASS = 4.5; // kg
-  private static final double PULLY_RADIUS = 0.0381 / 2; // m
-  private static final double GEARBOX_GEARING = 8.0 / 1; // output / input
+  private static final double kCarriageMass = 4.5; // kg
+  private static final double kPulleyRadius = 0.0381 / 2; // m
+  private static final double kGearRatio = 8.0 / 1; // output / input
 
-  private static final double MAX_SPEED = 1.5; // m / s
-  private static final double MAX_ACCEL = 2.0; // m / s
+  private static final double kMaxSpeed = 1.5; // m / s
+  private static final double kMaxAccel = 2.0; // m / s
 
-  private static final double MODLE_POS_ACCURACY = 0.0508; // m
-  private static final double MODLE_SPEED_ACCURACY = 1.016; // m / s
-  private static final double ENCODER_ACCURACY = 0.001;
+  private static final double kModelPositionAccuracy = 0.0508; // m
+  private static final double kModelSpeedAccuracy = 1.016; // m / s
+  private static final double kEncoderAccuracy = 0.001;
 
-  private static final double POSITION_ERROR_TOLERNCE = 0.0254; // m
-  private static final double VELOCITY_ERROR_TOLERNCE = 0.254; // m
+  private static final double kPositionErrorTolerance = 0.0254; // m
+  private static final double kVelocityErrorTolerance = 0.254; // m
 
-  private static final double CONTORL_EFFORT_TOLERNCE = 12.0; // Volts
-  private static final double MAX_VOLTAGE = 12.0; // Volts
+  private static final double kControlEffortTolerance = 12.0; // Volts
+  private static final double kMaxVoltage = 12.0; // Volts
 
-  private static final double MIN_HEIGHT = 0.0; // meters
-  private static final double MAX_HEIGHT = 2.5; // meters
+  private static final double kMinHeight = 0.0; // meters
+  private static final double kMaxHeight = 2.5; // meters
 
   private final TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(
-      MAX_SPEED, MAX_ACCEL);
+      kMaxSpeed, kMaxAccel);
 
   private TrapezoidProfile.State lastReference = new TrapezoidProfile.State();
   private TrapezoidProfile.State goal = new TrapezoidProfile.State(0.0, 0.0);
 
   private final LinearSystem<N2, N1, N1> plant = LinearSystemId.createElevatorSystem(
-      MOTORS, CARRAGE_MASS, PULLY_RADIUS,
-      GEARBOX_GEARING);
+      kMotors, kCarriageMass, kPulleyRadius,
+      kGearRatio);
 
   private final KalmanFilter<N2, N1, N1> observer = new KalmanFilter<>(
       Nat.N2(), Nat.N1(),
       plant,
-      VecBuilder.fill(MODLE_POS_ACCURACY, MODLE_SPEED_ACCURACY),
-      VecBuilder.fill(ENCODER_ACCURACY), Robot.LOOP_TIME);
+      VecBuilder.fill(kModelPositionAccuracy, kModelSpeedAccuracy),
+      VecBuilder.fill(kEncoderAccuracy), Robot.LOOP_TIME);
 
   private final LinearQuadraticRegulator<N2, N1, N1> controller = new LinearQuadraticRegulator<>(
       plant,
-      VecBuilder.fill(POSITION_ERROR_TOLERNCE, VELOCITY_ERROR_TOLERNCE),
-      VecBuilder.fill(CONTORL_EFFORT_TOLERNCE),
+      VecBuilder.fill(kPositionErrorTolerance, kVelocityErrorTolerance),
+      VecBuilder.fill(kControlEffortTolerance),
       Robot.LOOP_TIME);
 
   private final LinearSystemLoop<N2, N1, N1> loop = new LinearSystemLoop<>(
       plant, controller, observer, 
-      MAX_VOLTAGE,
+      kMaxVoltage,
       Robot.LOOP_TIME);
 
-  private final WPI_TalonSRX masterMotor = new WPI_TalonSRX(MASTER_MOTOR_ID);
-  private final WPI_TalonSRX followerMotor = new WPI_TalonSRX(FOLLOWER_MOTOR_ID);
+  private final WPI_TalonSRX masterMotor = new WPI_TalonSRX(kMasterMotorID);
+  private final WPI_TalonSRX followerMotor = new WPI_TalonSRX(kFollowerMotorID);
 
   private ElevatorSim sim = new ElevatorSim(plant,
-      MOTORS, GEARBOX_GEARING, PULLY_RADIUS, MIN_HEIGHT, MAX_HEIGHT);
+      kMotors, kGearRatio, kPulleyRadius, kMinHeight, kMaxHeight);
   private SimEncoder encoderSim;
 
   /**
@@ -141,12 +141,12 @@ public class LiftSubsystem extends SubsystemBase {
    * @param position The goal posotion in meters
    */
   public void setGoal(double position) {
-    if (position <= MAX_HEIGHT && position >= MIN_HEIGHT) {
+    if (position <= kMaxHeight && position >= kMinHeight) {
       goal = new TrapezoidProfile.State(position, 0.0);
     }
   }
 
   private static double ticksToMeters(double ticks) {
-    return ((2 * PULLY_RADIUS * Math.PI) / 4096) * ticks;
+    return ((2 * kPulleyRadius * Math.PI) / 4096) * ticks;
   }
 }

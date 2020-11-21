@@ -36,7 +36,6 @@ public class DriveArcadeCommand extends CommandBase {
     double steerVal = Math.abs(steer.get()) > 0.1 ? steer.get() : 0; 
     drive.driveOpenLoop(throttleVal + steerVal,
                              throttleVal - steerVal);
-    System.out.println(throttleVal + " " + steerVal);
   }
 
   @Override
